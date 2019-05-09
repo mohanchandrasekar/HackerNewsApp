@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_bookmarks"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_light_grey">
+
+        <LinearLayout
+            android:id="@+id/progress_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/loading"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/parent_coments"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/app_bar"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/recycler_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/text_no_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/recycler_comments"
+                android:text="@string/no_comments"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/text_title"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:id="@+id/app_bar"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:fitsSystemWindows="true">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/ivMenu"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:padding="2dp"-->
+            <!--android:background="@drawable/ic_arrow_back_black_24dp" />-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--app:layout_scrollFlags="scroll|enterAlways"-->
+            <!--app:theme="@style/AppTheme" />-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+</android.support.design.widget.CoordinatorLayout>

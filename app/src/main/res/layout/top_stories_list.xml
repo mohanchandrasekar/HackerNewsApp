@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/parent_layout"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
@@ -10,6 +11,7 @@
         android:layout_margin="5dp">
 
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -43,7 +45,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_margin="2dp"
-                    android:text="https://www.mohanben.com"
+                    android:text=""
                     android:textSize="@dimen/text_large_body" />
 
                 <TextView
@@ -52,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:layout_below="@+id/story_uri"
-                    android:text="191 points by Mohan 7 hours ago"
+                    android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_small_body" />
 
@@ -71,7 +73,7 @@
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:layout_marginTop="20dp"
-                    android:text="30"
+                    android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_body"
                     android:textStyle="bold" />
@@ -83,7 +85,7 @@
                     android:layout_below="@+id/story_comments"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    android:text="Comments"
+                    android:text=""
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/text_large_body" />
 

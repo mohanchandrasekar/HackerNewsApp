@@ -2,10 +2,12 @@ package com.hackernewsapp.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.hackernewsapp.model.Story;
-import com.hackernewsapp.repository.NewsService;
+import com.hackernewsapp.repository.NewsApiRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +15,21 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * ViewModel for retain the value while rotating the screen and business logic implementation
  */
 public class TopStoriesViewModel extends ViewModel {
-    private final NewsService mNewsService;
-    private MutableLiveData<List<Story>> mStoryListObservable = new MutableLiveData<List<Story>>();
+    private NewsApiRepository mNewsApiRepository;
+    private MutableLiveData<List<Story>> mStoryListObservable = new MutableLiveData<>();
     private MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
     private List<Story> mStoryArrayList = new ArrayList<>();
-    private Story story;
+    private Story mStory;
+
+    TopStoriesViewModel(@NonNull Context context) {
+        mNewsApiRepository = new NewsApiRepository();
+        getTopStoryList();
+    }
 
     public MutableLiveData<Boolean> getIsApiCallFinished() {
         return isApiCallFinished;
@@ -34,17 +39,8 @@ public class TopStoriesViewModel extends ViewModel {
         return mStoryListObservable;
     }
 
-    public TopStoriesViewModel() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NewsService.HTTPS_API)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        mNewsService = retrofit.create(NewsService.class);
-        getTopStoryList();
-    }
-
     public void getTopStoryList() {
-        mNewsService.getTopStories().enqueue(new Callback<List<Long>>() {
+        mNewsApiRepository.getNewsService().getTopStories().enqueue(new Callback<List<Long>>() {
             @Override
             public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
                 List<Long> storyList = response.body();
@@ -65,15 +61,15 @@ public class TopStoriesViewModel extends ViewModel {
     }
 
     private void getStoryDetails(Long storyItem) {
-        mNewsService.getStoryItem(String.valueOf(storyItem)).
+        mNewsApiRepository.getNewsService().getStoryItem(String.valueOf(storyItem)).
                 enqueue(new Callback<Story>() {
                     @Override
                     public void onResponse(Call<Story> call, Response<Story> response) {
                         simulateDelay();
-                        story = response.body();
-                        Log.e("Mohan", "Story Title" + story.getTitle());
-                        if (story != null)
-                            mStoryArrayList.add(story);
+                        mStory = response.body();
+                        Log.e("Mohan", "Story Title" + mStory.getTitle());
+                        if (mStory != null)
+                            mStoryArrayList.add(mStory);
                     }
 
                     @Override

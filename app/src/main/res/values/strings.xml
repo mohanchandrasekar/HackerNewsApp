@@ -6,4 +6,6 @@
     <string name="story_by">by</string>
     <string name="story_points">points</string>
     <string name="via">via</string>
+    <string name="loading">Loading..</string>
+    <string name="no_comments">No Comments</string>
 </resources>

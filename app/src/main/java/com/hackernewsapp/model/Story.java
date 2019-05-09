@@ -1,13 +1,12 @@
 package com.hackernewsapp.model;
 
-import java.util.List;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 
 public class Story implements Parcelable {
 
@@ -22,7 +21,7 @@ public class Story implements Parcelable {
     private int id;
     @SerializedName("kids")
     @Expose
-    private List<Integer> kids = null;
+    private ArrayList<Integer> kids = null;
     @SerializedName("score")
     @Expose
     private int score;
@@ -40,10 +39,6 @@ public class Story implements Parcelable {
     private String url;
     public final static Parcelable.Creator<Story> CREATOR = new Creator<Story>() {
 
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Story createFromParcel(Parcel in) {
             return new Story(in);
         }
@@ -54,7 +49,7 @@ public class Story implements Parcelable {
 
     };
 
-    protected Story(Parcel in) {
+    private Story(Parcel in) {
         this.by = ((String) in.readValue((String.class.getClassLoader())));
         this.descendants = ((int) in.readValue((int.class.getClassLoader())));
         this.id = ((int) in.readValue((int.class.getClassLoader())));
@@ -93,11 +88,11 @@ public class Story implements Parcelable {
         this.id = id;
     }
 
-    public List<Integer> getKids() {
+    public ArrayList<Integer> getKids() {
         return kids;
     }
 
-    public void setKids(List<Integer> kids) {
+    public void setKids(ArrayList<Integer> kids) {
         this.kids = kids;
     }
 
