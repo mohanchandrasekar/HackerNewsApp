@@ -1,7 +1,7 @@
 package com.hackernewsapp.repository;
 
-import com.hackernewsapp.model.Comment;
-import com.hackernewsapp.model.Story;
+import com.hackernewsapp.data.Comment;
+import com.hackernewsapp.data.Story;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
+/**
+ * Retrofit api call interface for topstories and storyitem, commentitem information from webservice
+ */
 public interface NewsService {
 
     String HTTPS_API = "https://hacker-news.firebaseio.com";

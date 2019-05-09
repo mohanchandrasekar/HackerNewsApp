@@ -1,6 +1,5 @@
 package com.hackernewsapp.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,7 @@ import android.widget.TextView;
 
 import com.hackernewsapp.R;
 import com.hackernewsapp.adapter.StoryAdapter;
-import com.hackernewsapp.model.Comment;
+import com.hackernewsapp.data.Comment;
 import com.hackernewsapp.repository.NewsApiRepository;
 import com.hackernewsapp.viewmodel.CommentViewModel;
 import com.hackernewsapp.viewmodel.CommonViewModelFactory;
@@ -30,9 +28,13 @@ import java.util.Objects;
 public class CommentFragment extends Fragment {
 
     private static final String KEY_PROJECT_ID = "comments_id";
+    /* CommentViewModel is responsible for get the value in observable nammaner*/
     private CommentViewModel mCommentViewModel;
+    /* Recycler commentView for show the comment list item */
     private RecyclerView mCommentRecyclerView;
+    /* progress bar loading wait until result return from api*/
     private LinearLayout mLoadingBar;
+    /* if no comment list is available it will show no comments*/
     private TextView mNoCommentsText;
 
 
@@ -41,7 +43,7 @@ public class CommentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ArrayList<Integer> kidsList = Objects.requireNonNull(getArguments()).getIntegerArrayList(KEY_PROJECT_ID);
         mCommentViewModel = ViewModelProviders.of(this,
-                new CommonViewModelFactory(Objects.requireNonNull(getActivity()).getApplicationContext(), kidsList)).get(CommentViewModel.class);
+                new CommonViewModelFactory(Objects.requireNonNull(getActivity()).getApplicationContext(), Objects.requireNonNull(kidsList), new NewsApiRepository())).get(CommentViewModel.class);
     }
 
     @Nullable
@@ -52,24 +54,17 @@ public class CommentFragment extends Fragment {
         mCommentRecyclerView = fragmentView.findViewById(R.id.recycler_comments);
         mLoadingBar = fragmentView.findViewById(R.id.progress_indicator);
         mNoCommentsText = fragmentView.findViewById(R.id.text_no_comments);
-
         mLoadingBar.setVisibility(ProgressBar.VISIBLE);
-        mCommentViewModel.getIsApiCallFinished().observe(this, isFinished -> {
-            if (isFinished) {
-                mLoadingBar.setVisibility(ProgressBar.GONE);
-            }
-        });
 
-        mCommentViewModel.getmCommentListObservable().observe(this, comments -> {
-            if (comments != null) {
-                updateCommentAdapter(comments);
-            } else {
-                mNoCommentsText.setVisibility(View.VISIBLE);
-            }
-        });
+        mCommentViewModel.getIsApiCallFinished().observe(this, this::onApiFinishChanged);
+        mCommentViewModel.getmCommentListObservable().observe(this, this::onCommentListChanged);
         return fragmentView;
     }
 
+    /**
+     * Update the comment adapter from updated lsit from ViewModel
+     * @param commentList updated commentList which contain comment info
+     */
     private void updateCommentAdapter(List<Comment> commentList) {
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         boolean isComment = true;
@@ -97,4 +92,25 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Viewmodel send the updated commentlist
+     * @param comments which contain comment info list
+     */
+    private void onCommentListChanged(List<Comment> comments) {
+        if (comments != null) {
+            updateCommentAdapter(comments);
+        } else {
+            mNoCommentsText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Once api finish the call , it will update the finish status
+     * @param isFinished status of api call
+     */
+    private void onApiFinishChanged(Boolean isFinished) {
+        if (isFinished) {
+            mLoadingBar.setVisibility(ProgressBar.GONE);
+        }
+    }
 }

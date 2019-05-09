@@ -5,16 +5,24 @@ import android.util.Log;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * NewApiRepositoryClass is used to create instance for NewsService for api call
+ */
 public class NewsApiRepository {
+
     private NewsService mNewsService;
 
-    public NewsApiRepository(){
+    public NewsApiRepository() {
 
     }
 
+    /**
+     * Singleton Instance for api call creation
+     *
+     * @return NewsService instance
+     */
     public NewsService getNewsService() {
         if (mNewsService == null) {
-            Log.e("NewsApiRepository", "getNewsService is called");
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(NewsService.HTTPS_API)
                     .addConverterFactory(GsonConverterFactory.create())

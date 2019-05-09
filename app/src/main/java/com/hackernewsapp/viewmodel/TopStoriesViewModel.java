@@ -6,7 +6,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.hackernewsapp.model.Story;
+import com.hackernewsapp.NewsApplication;
+import com.hackernewsapp.data.Story;
 import com.hackernewsapp.repository.NewsApiRepository;
 
 import java.util.ArrayList;
@@ -20,14 +21,17 @@ import retrofit2.Response;
  * ViewModel for retain the value while rotating the screen and business logic implementation
  */
 public class TopStoriesViewModel extends ViewModel {
+    /* NewsApiRepository is give instance of NewsService*/
     private NewsApiRepository mNewsApiRepository;
+    /* mCommentListObservable is a MutableLiveData which responsible for send updated list to subscriber */
     private MutableLiveData<List<Story>> mStoryListObservable = new MutableLiveData<>();
+    /*update apifinish liveData to subscriber*/
     private MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
+    /* updated story information in list*/
     private List<Story> mStoryArrayList = new ArrayList<>();
-    private Story mStory;
 
-    TopStoriesViewModel(@NonNull Context context) {
-        mNewsApiRepository = new NewsApiRepository();
+    TopStoriesViewModel(@NonNull Context context, @NonNull NewsApiRepository newsApiRepository) {
+        mNewsApiRepository = newsApiRepository;
         getTopStoryList();
     }
 
@@ -39,6 +43,10 @@ public class TopStoriesViewModel extends ViewModel {
         return mStoryListObservable;
     }
 
+    /**
+     * Retrofit api call for get the topStoriesId as list
+     * Story list which contain the id and id is used to get the story details
+     */
     public void getTopStoryList() {
         mNewsApiRepository.getNewsService().getTopStories().enqueue(new Callback<List<Long>>() {
             @Override
@@ -49,7 +57,6 @@ public class TopStoriesViewModel extends ViewModel {
                     getStoryDetails(storyId);
                 }
                 isApiCallFinished.setValue(true);
-                Log.e("Mohan", "Story size = " + mStoryArrayList.size());
                 mStoryListObservable.setValue(mStoryArrayList);
             }
 
@@ -60,26 +67,33 @@ public class TopStoriesViewModel extends ViewModel {
         });
     }
 
+    /**
+     * retrofit api call for get the Story details from the webservice
+     *
+     * @param storyItem id
+     */
     private void getStoryDetails(Long storyItem) {
         mNewsApiRepository.getNewsService().getStoryItem(String.valueOf(storyItem)).
                 enqueue(new Callback<Story>() {
                     @Override
                     public void onResponse(Call<Story> call, Response<Story> response) {
                         simulateDelay();
-                        mStory = response.body();
-                        Log.e("Mohan", "Story Title" + mStory.getTitle());
-                        if (mStory != null)
-                            mStoryArrayList.add(mStory);
+                        Story story = response.body();
+                        Log.e("Mohan", "Story Title" + story.getTitle());
+                        if (story != null)
+                            mStoryArrayList.add(story);
                     }
 
                     @Override
                     public void onFailure(Call<Story> call, Throwable t) {
                         // TODO better error handling
-                        //mStoryListObservable.setValue(null);
                     }
                 });
     }
 
+    /**
+     * delay for network call
+     */
     private void simulateDelay() {
         try {
             Thread.sleep(10);

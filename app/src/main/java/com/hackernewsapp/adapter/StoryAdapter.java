@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hackernewsapp.MainActivity;
+import com.hackernewsapp.ui.MainActivity;
 import com.hackernewsapp.R;
-import com.hackernewsapp.model.Comment;
-import com.hackernewsapp.model.Story;
+import com.hackernewsapp.data.Comment;
+import com.hackernewsapp.data.Story;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ public class StoryAdapter extends RecyclerView.Adapter {
     /* Context of the application */
     private Context mContext;
 
-    public StoryAdapter(Context context, List<Story> storyList) {
+    public StoryAdapter(@NonNull Context context,@NonNull List<Story> storyList) {
         this.mContext = context;
         this.mStoryList = storyList;
     }
 
-    public StoryAdapter(Context applicationContext, List<Comment> commentList, boolean isComment) {
+    public StoryAdapter(@NonNull Context applicationContext, @NonNull List<Comment> commentList,@NonNull boolean isComment) {
         this.mContext = applicationContext;
         this.mCommentList = commentList;
         this.mIsComment = isComment;

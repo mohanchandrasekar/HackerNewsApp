@@ -1,4 +1,4 @@
-package com.hackernewsapp;
+package com.hackernewsapp.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -10,9 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.hackernewsapp.R;
 import com.hackernewsapp.adapter.StoryAdapter;
-import com.hackernewsapp.model.Story;
-import com.hackernewsapp.ui.CommentFragment;
+import com.hackernewsapp.data.Story;
+import com.hackernewsapp.repository.NewsApiRepository;
 import com.hackernewsapp.viewmodel.CommonViewModelFactory;
 import com.hackernewsapp.viewmodel.TopStoriesViewModel;
 
@@ -21,9 +22,12 @@ import java.util.List;
 
 import static com.hackernewsapp.ui.CommentFragment.forProject;
 
+/**
+ * Swipe to refresh to show the topStories in recyclerview
+ */
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
-    /* Swipe to Referesh the updated story info list from the api  */
+    /* Swipe to Refresh the updated story info list from the api  */
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     /*TopStoriesViewModel is responsible for return the value based on Observable mannaer*/
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setupRecyclerView();
 
         mTopStoriesViewModel = ViewModelProviders.of(this,
-                new CommonViewModelFactory(getApplicationContext())).get(TopStoriesViewModel.class);
+                new CommonViewModelFactory(getApplicationContext(), new NewsApiRepository())).get(TopStoriesViewModel.class);
 
         mTopStoriesViewModel.getIsApiCallFinished().observe(this, this::onProgressBarChanged);
 
