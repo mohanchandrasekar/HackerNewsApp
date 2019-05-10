@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_bookmarks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             android:layout_below="@+id/app_bar"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+            <androidx.recyclerview.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/recycler_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,8 +50,10 @@
                 android:layout_centerInParent="true"
                 android:layout_below="@+id/recycler_comments"
                 android:text="@string/no_comments"
-                android:textColor="@color/dark_grey"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
                 android:textSize="@dimen/text_title"
+                android:textStyle="bold"
                 android:visibility="gone" />
         </RelativeLayout>
 
@@ -78,4 +80,4 @@
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

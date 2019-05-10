@@ -1,14 +1,15 @@
 package com.hackernewsapp.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hackernewsapp.R;
 import com.hackernewsapp.adapter.StoryAdapter;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setupRecyclerView();
 
         mTopStoriesViewModel = ViewModelProviders.of(this,
-                new CommonViewModelFactory(getApplicationContext(), new NewsApiRepository())).get(TopStoriesViewModel.class);
+                new CommonViewModelFactory(new NewsApiRepository())).get(TopStoriesViewModel.class);
 
         mTopStoriesViewModel.getIsApiCallFinished().observe(this, this::onProgressBarChanged);
 

@@ -1,19 +1,26 @@
 package com.hackernewsapp.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.hackernewsapp.NewsApplication;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.hackernewsapp.data.Comment;
 import com.hackernewsapp.repository.NewsApiRepository;
+
+import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableSubscriber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +30,7 @@ import retrofit2.Response;
  * and update the commentlist and apifinish in live data to activity or fragment
  */
 public class CommentViewModel extends ViewModel {
+    private static final String TAG = "CommentViewModel";
     /* NewsApiRepository is give instance of NewsService*/
     private NewsApiRepository mNewsApiRepository;
     /* updated comment information in list*/
@@ -33,30 +41,62 @@ public class CommentViewModel extends ViewModel {
     private Handler mHandlerThread = new Handler();
     /*update apifinish liveData to subscriber*/
     private MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
-    private int mCount = 0;
+    private ArrayList<Integer> mKidsIdList;
 
-    CommentViewModel(@NonNull Context context,
-                     @NonNull ArrayList<Integer> kidsList, @NonNull  NewsApiRepository newsApiRepository) {
-        mNewsApiRepository = newsApiRepository ;
-        if (kidsList.size() > 0) {
-            getComments(kidsList);
-        }
+    CommentViewModel(@NonNull ArrayList<Integer> kidsList, @NonNull NewsApiRepository newsApiRepository) {
+        mNewsApiRepository = newsApiRepository;
+        mKidsIdList = kidsList;
+        Flowable<Integer> mFlowableKids = Flowable.create(this::onKidsIdChanged, BackpressureStrategy.LATEST);
+
+        mFlowableKids.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(getCommentList());
     }
 
-    private void getComments(@NonNull ArrayList<Integer> mKidsList) {
-        int size = mKidsList.size();
-        for (int i = 0; i < size; i++) {
-            getCommentDetails(mKidsList.get(i));
+    private void onKidsIdChanged(FlowableEmitter<Integer> flowableEmitter) {
+        try {
+            for (int i = 0; i < mKidsIdList.size(); i++) {
+                flowableEmitter.onNext(mKidsIdList.get(i));
+            }
+            flowableEmitter.onComplete();
+        } catch (Exception e) {
+            flowableEmitter.onError(e);
         }
-        mHandlerThread.postDelayed(() -> {
-            isApiCallFinished.setValue(true);
-            Log.e("Vive", "Comment Size = " + mCommentArrayList.size());
-            mCommentListObservable.setValue(mCommentArrayList);
-        }, 1000);
     }
 
     /**
+     * Retrofit api call to get the commentDetails from the webservices
+     */
+    private FlowableSubscriber<? super Integer> getCommentList() {
+        return new FlowableSubscriber<Integer>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(Long.MAX_VALUE);
+            }
+
+            @Override
+            public void onNext(Integer kidsId) {
+                getCommentDetails(kidsId);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, "onError : " + t.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                mHandlerThread.postDelayed(() -> {
+                isApiCallFinished.setValue(true);
+                Log.e(TAG, "Comment Size = " + mCommentArrayList.size());
+                mCommentListObservable.setValue(mCommentArrayList);
+                }, 1000);
+            }
+        };
+
+    }
+    /**
      * Retrofit api call for get the commentDetails from webservice
+     *
      * @param commentsItem commentsId
      */
     private void getCommentDetails(@NonNull Integer commentsItem) {
@@ -64,11 +104,10 @@ public class CommentViewModel extends ViewModel {
                 enqueue(new Callback<Comment>() {
                     @Override
                     public void onResponse(Call<Comment> call, Response<Comment> response) {
-                        mCount++;
                         simulateDelay();
                         Comment comments = response.body();
                         mCommentArrayList.add(comments);
-                        Log.e("Vive", "comments = " + mCommentArrayList.size());
+                        Log.e("Vive", "Comment Size = " + mCommentArrayList.size());
                     }
 
                     @Override
@@ -91,6 +130,7 @@ public class CommentViewModel extends ViewModel {
 
     /**
      * return the updated Commentlist to subscriber
+     *
      * @return
      */
     public MutableLiveData<List<Comment>> getmCommentListObservable() {
@@ -99,10 +139,18 @@ public class CommentViewModel extends ViewModel {
 
     /**
      * return updated finishapi call status to subscriber
+     *
      * @return
      */
     public MutableLiveData<Boolean> getIsApiCallFinished() {
         return isApiCallFinished;
     }
 
+    /**
+     * update commentlist
+     * @param commentList
+     */
+    public void updateCommentList(List<Comment> commentList) {
+        this.mCommentListObservable.setValue(commentList);
+    }
 }

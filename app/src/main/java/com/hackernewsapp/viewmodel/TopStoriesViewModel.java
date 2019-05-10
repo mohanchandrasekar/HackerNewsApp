@@ -1,12 +1,12 @@
 package com.hackernewsapp.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.os.Handler;
 import android.util.Log;
 
-import com.hackernewsapp.NewsApplication;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.hackernewsapp.data.Story;
 import com.hackernewsapp.repository.NewsApiRepository;
 
@@ -30,7 +30,7 @@ public class TopStoriesViewModel extends ViewModel {
     /* updated story information in list*/
     private List<Story> mStoryArrayList = new ArrayList<>();
 
-    TopStoriesViewModel(@NonNull Context context, @NonNull NewsApiRepository newsApiRepository) {
+    TopStoriesViewModel(@NonNull NewsApiRepository newsApiRepository) {
         mNewsApiRepository = newsApiRepository;
         getTopStoryList();
     }
@@ -56,8 +56,10 @@ public class TopStoriesViewModel extends ViewModel {
                     Long storyId = storyList.get(i);
                     getStoryDetails(storyId);
                 }
-                isApiCallFinished.setValue(true);
-                mStoryListObservable.setValue(mStoryArrayList);
+             new Handler().postDelayed(() -> {
+                 isApiCallFinished.setValue(true);
+                 mStoryListObservable.setValue(mStoryArrayList);
+             },1000);
             }
 
             @Override
@@ -100,5 +102,13 @@ public class TopStoriesViewModel extends ViewModel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * update storyList to activity
+     * @param storyList
+     */
+    public void updateCommentList(List<Story> storyList) {
+        this.mStoryListObservable.postValue(storyList);
     }
 }

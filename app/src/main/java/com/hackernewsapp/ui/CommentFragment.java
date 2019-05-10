@@ -1,18 +1,19 @@
 package com.hackernewsapp.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hackernewsapp.R;
 import com.hackernewsapp.adapter.StoryAdapter;
@@ -42,8 +43,9 @@ public class CommentFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ArrayList<Integer> kidsList = Objects.requireNonNull(getArguments()).getIntegerArrayList(KEY_PROJECT_ID);
+        ArrayList<Integer> newkidsList = kidsList != null && kidsList.size() > 0 ? kidsList : new ArrayList<Integer>();
         mCommentViewModel = ViewModelProviders.of(this,
-                new CommonViewModelFactory(Objects.requireNonNull(getActivity()).getApplicationContext(), Objects.requireNonNull(kidsList), new NewsApiRepository())).get(CommentViewModel.class);
+                new CommonViewModelFactory(newkidsList, new NewsApiRepository())).get(CommentViewModel.class);
     }
 
     @Nullable
@@ -97,7 +99,7 @@ public class CommentFragment extends Fragment {
      * @param comments which contain comment info list
      */
     private void onCommentListChanged(List<Comment> comments) {
-        if (comments != null) {
+        if (comments != null && comments.size() > 0) {
             updateCommentAdapter(comments);
         } else {
             mNoCommentsText.setVisibility(View.VISIBLE);

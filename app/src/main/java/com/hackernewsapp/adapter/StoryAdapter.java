@@ -1,20 +1,21 @@
 package com.hackernewsapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hackernewsapp.ui.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hackernewsapp.R;
 import com.hackernewsapp.data.Comment;
 import com.hackernewsapp.data.Story;
+import com.hackernewsapp.ui.MainActivity;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class StoryAdapter extends RecyclerView.Adapter {
     /* Context of the application */
     private Context mContext;
 
-    public StoryAdapter(@NonNull Context context,@NonNull List<Story> storyList) {
+    public StoryAdapter(@NonNull Context context, @NonNull List<Story> storyList) {
         this.mContext = context;
         this.mStoryList = storyList;
     }
