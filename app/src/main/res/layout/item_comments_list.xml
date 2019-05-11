@@ -3,8 +3,7 @@
     android:id="@+id/container_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@color/dark_grey">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:id="@+id/comment_item_layout"

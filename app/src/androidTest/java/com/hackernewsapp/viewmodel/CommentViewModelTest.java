@@ -37,7 +37,7 @@ public class CommentViewModelTest {
     }
 
     @Rule
-    public ActivityTestRule<MainActivity> mMainActivity = new
+    public final ActivityTestRule<MainActivity> mMainActivity = new
             ActivityTestRule<>(MainActivity.class, true, false);
 
 

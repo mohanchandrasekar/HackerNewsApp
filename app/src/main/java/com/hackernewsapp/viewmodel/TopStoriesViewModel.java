@@ -22,13 +22,13 @@ import retrofit2.Response;
  */
 public class TopStoriesViewModel extends ViewModel {
     /* NewsApiRepository is give instance of NewsService*/
-    private NewsApiRepository mNewsApiRepository;
+    private final NewsApiRepository mNewsApiRepository;
     /* mCommentListObservable is a MutableLiveData which responsible for send updated list to subscriber */
-    private MutableLiveData<List<Story>> mStoryListObservable = new MutableLiveData<>();
+    private final MutableLiveData<List<Story>> mStoryListObservable = new MutableLiveData<>();
     /*update apifinish liveData to subscriber*/
-    private MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
     /* updated story information in list*/
-    private List<Story> mStoryArrayList = new ArrayList<>();
+    private final List<Story> mStoryArrayList = new ArrayList<>();
 
     TopStoriesViewModel(@NonNull NewsApiRepository newsApiRepository) {
         mNewsApiRepository = newsApiRepository;
@@ -82,8 +82,7 @@ public class TopStoriesViewModel extends ViewModel {
                         simulateDelay();
                         Story story = response.body();
                         Log.e("Mohan", "Story Title" + story.getTitle());
-                        if (story != null)
-                            mStoryArrayList.add(story);
+                        mStoryArrayList.add(story);
                     }
 
                     @Override
@@ -106,7 +105,7 @@ public class TopStoriesViewModel extends ViewModel {
 
     /**
      * update storyList to activity
-     * @param storyList
+     * @param storyList info
      */
     public void updateCommentList(List<Story> storyList) {
         this.mStoryListObservable.postValue(storyList);

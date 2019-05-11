@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class CommonViewModelFactory implements ViewModelProvider.Factory {
     private ArrayList<Integer> mKidsList;
-    private NewsApiRepository mNewsApiRepository;
+    private final NewsApiRepository mNewsApiRepository;
 
     public CommonViewModelFactory(@NonNull ArrayList<Integer> kidsList,
                                   @NonNull NewsApiRepository newsApiRepository) {

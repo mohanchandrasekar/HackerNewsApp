@@ -30,13 +30,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mMainActivity = new
+    public final ActivityTestRule<MainActivity> mMainActivity = new
             ActivityTestRule<>(MainActivity.class, true, false);
-
-    @Before
-    public void setUp() {
-
-    }
 
     @Test
     public void verify_list_item_info_visible() throws InterruptedException {
@@ -104,7 +99,4 @@ public class MainActivityTest {
         //onView(withText("My YC app: Dropbox - Throw away your USB drive")).check(matches(hasDescendant(withText(mStoryList.get(0).getTitle()))));
     }
 
-    @Test
-    public void verify_scroll_to_position(){
-    }
 }

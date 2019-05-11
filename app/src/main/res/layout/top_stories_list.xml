@@ -33,7 +33,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_margin="2dp"
-                    android:text="Mohan"
+                    android:text=""
                     android:textSize="@dimen/text_body"
                     android:textStyle="bold" />
 

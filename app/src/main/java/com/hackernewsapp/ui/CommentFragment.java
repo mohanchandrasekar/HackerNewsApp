@@ -43,7 +43,7 @@ public class CommentFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ArrayList<Integer> kidsList = Objects.requireNonNull(getArguments()).getIntegerArrayList(KEY_PROJECT_ID);
-        ArrayList<Integer> newkidsList = kidsList != null && kidsList.size() > 0 ? kidsList : new ArrayList<Integer>();
+        ArrayList<Integer> newkidsList = kidsList != null && kidsList.size() > 0 ? kidsList : new ArrayList<>();
         mCommentViewModel = ViewModelProviders.of(this,
                 new CommonViewModelFactory(newkidsList, new NewsApiRepository())).get(CommentViewModel.class);
     }
@@ -70,7 +70,7 @@ public class CommentFragment extends Fragment {
     private void updateCommentAdapter(List<Comment> commentList) {
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         boolean isComment = true;
-        StoryAdapter commentAdapter = new StoryAdapter(getActivity(), commentList, isComment);
+        StoryAdapter commentAdapter = new StoryAdapter(Objects.requireNonNull(getActivity()), commentList, isComment);
         mCommentRecyclerView.setAdapter(commentAdapter);
     }
 

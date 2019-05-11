@@ -32,16 +32,16 @@ import retrofit2.Response;
 public class CommentViewModel extends ViewModel {
     private static final String TAG = "CommentViewModel";
     /* NewsApiRepository is give instance of NewsService*/
-    private NewsApiRepository mNewsApiRepository;
+    private final NewsApiRepository mNewsApiRepository;
     /* updated comment information in list*/
-    private List<Comment> mCommentArrayList = new ArrayList<>();
+    private final List<Comment> mCommentArrayList = new ArrayList<>();
     /* mCommentListObservable is a MutableLiveData which responsible for send updated list to subscriber */
-    private MutableLiveData<List<Comment>> mCommentListObservable = new MutableLiveData<>();
+    private final MutableLiveData<List<Comment>> mCommentListObservable = new MutableLiveData<>();
     /* Handler thread for the api status*/
-    private Handler mHandlerThread = new Handler();
+    private final Handler mHandlerThread = new Handler();
     /*update apifinish liveData to subscriber*/
-    private MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
-    private ArrayList<Integer> mKidsIdList;
+    private final MutableLiveData<Boolean> isApiCallFinished = new MutableLiveData<>();
+    private final ArrayList<Integer> mKidsIdList;
 
     CommentViewModel(@NonNull ArrayList<Integer> kidsList, @NonNull NewsApiRepository newsApiRepository) {
         mNewsApiRepository = newsApiRepository;
@@ -131,7 +131,7 @@ public class CommentViewModel extends ViewModel {
     /**
      * return the updated Commentlist to subscriber
      *
-     * @return
+     * @return mCommentListObservable
      */
     public MutableLiveData<List<Comment>> getmCommentListObservable() {
         return mCommentListObservable;
@@ -140,7 +140,7 @@ public class CommentViewModel extends ViewModel {
     /**
      * return updated finishapi call status to subscriber
      *
-     * @return
+     * @return isApiCallFinished
      */
     public MutableLiveData<Boolean> getIsApiCallFinished() {
         return isApiCallFinished;

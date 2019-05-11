@@ -2,8 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_bookmarks"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_light_grey">
+    android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/progress_indicator"

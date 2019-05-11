@@ -34,9 +34,6 @@ public class Comment implements Parcelable {
     public final static Parcelable.Creator<Comment> CREATOR = new Creator<Comment>() {
 
 
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Comment createFromParcel(Parcel in) {
             return new Comment(in);
         }
@@ -47,7 +44,7 @@ public class Comment implements Parcelable {
 
     };
 
-    protected Comment(Parcel in) {
+    private Comment(Parcel in) {
         this.by = ((String) in.readValue((String.class.getClassLoader())));
         this.id = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.kids, (java.lang.Integer.class.getClassLoader()));

@@ -29,14 +29,14 @@ public class StoryAdapter extends RecyclerView.Adapter {
     /* Commentlist which contain comment information*/
     private List<Comment> mCommentList;
     /* Context of the application */
-    private Context mContext;
+    private final Context mContext;
 
     public StoryAdapter(@NonNull Context context, @NonNull List<Story> storyList) {
         this.mContext = context;
         this.mStoryList = storyList;
     }
 
-    public StoryAdapter(@NonNull Context applicationContext, @NonNull List<Comment> commentList,@NonNull boolean isComment) {
+    public StoryAdapter(@NonNull Context applicationContext, @NonNull List<Comment> commentList, boolean isComment) {
         this.mContext = applicationContext;
         this.mCommentList = commentList;
         this.mIsComment = isComment;
@@ -74,7 +74,8 @@ public class StoryAdapter extends RecyclerView.Adapter {
         commentViewHolder.mCommentComments.setText(mCommentList.get(position).getText());
         int time = mCommentList.get(position).getTime();
         String hoursBy = convertSecondsToHours(time);
-        commentViewHolder.mCommentTime.setText(hoursBy + " hours ago ");
+        String hoursAgo = hoursBy + " hours ago ";
+        commentViewHolder.mCommentTime.setText(hoursAgo);
     }
 
     /**
@@ -94,9 +95,9 @@ public class StoryAdapter extends RecyclerView.Adapter {
         String byName = mStoryList.get(position).getBy();
         int time = mStoryList.get(position).getTime();
         String hours = convertSecondsToHours(time);
-
-        storyViewHolder.mStoryPostInfo.setText(String.valueOf(score) + " points " + " by " +
-                byName + " " + hours + " hours ago ");
+        String postInfo = score + " points " + " by " +
+                byName + " " + hours + " hours ago ";
+        storyViewHolder.mStoryPostInfo.setText(postInfo);
         storyViewHolder.mStoryComments.setText(String.valueOf(mStoryList.get(position).getDescendants()));
 
         storyViewHolder.mLinearLayout.setOnClickListener(view -> {
@@ -126,12 +127,12 @@ public class StoryAdapter extends RecyclerView.Adapter {
         return String.format("%d", h);
     }
 
-    public static class StoryViewHolder extends RecyclerView.ViewHolder {
-        private TextView mStoryTitle;
-        private TextView mStoryUri;
-        private TextView mStoryPostInfo;
-        private TextView mStoryComments;
-        private LinearLayout mLinearLayout;
+    static class StoryViewHolder extends RecyclerView.ViewHolder {
+        private final TextView mStoryTitle;
+        private final TextView mStoryUri;
+        private final TextView mStoryPostInfo;
+        private final TextView mStoryComments;
+        private final LinearLayout mLinearLayout;
 
         StoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -143,10 +144,10 @@ public class StoryAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
-        private TextView mCommentTitle;
-        private TextView mCommentTime;
-        private TextView mCommentComments;
+    static class CommentViewHolder extends RecyclerView.ViewHolder {
+        private final TextView mCommentTitle;
+        private final TextView mCommentTime;
+        private final TextView mCommentComments;
 
         CommentViewHolder(@NonNull View itemView) {
             super(itemView);

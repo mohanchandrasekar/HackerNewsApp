@@ -27,16 +27,14 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class TopStoriesViewModelTest {
 
-    private ArrayList<Integer> mKidsList;
-
     @Before
     public void setup() {
-        mKidsList = new ArrayList<>();
+        ArrayList<Integer> mKidsList = new ArrayList<>();
         mKidsList.add(2921983);
     }
 
     @Rule
-    public ActivityTestRule<MainActivity> mMainActivity = new
+    public final ActivityTestRule<MainActivity> mMainActivity = new
             ActivityTestRule<>(MainActivity.class, true, false);
 
     @Test
@@ -51,7 +49,7 @@ public class TopStoriesViewModelTest {
         Thread.sleep(5000);
 
         topStoriesViewModel.getStoryListObservable().observe(mainActivity,
-                stories -> assertNotNull(stories.size()));
+                stories -> stories.size());
 
         //Assert
         assertNotNull(topStoriesViewModel);
@@ -68,12 +66,9 @@ public class TopStoriesViewModelTest {
                 new CommonViewModelFactory(new NewsApiRepository())).get(TopStoriesViewModel.class);
         Thread.sleep(1000);
 
-        topStoriesViewModel.getIsApiCallFinished().observe(mainActivity, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean isFinish) {
-                //Assert
-                assertTrue(isFinish);
-            }
+        topStoriesViewModel.getIsApiCallFinished().observe(mainActivity, isFinish -> {
+            //Assert
+            assertTrue(isFinish);
         });
     }
 
